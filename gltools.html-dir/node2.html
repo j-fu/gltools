@@ -1,0 +1,1161 @@
+<!--Converted with LaTeX2HTML 97.1 (release) (July 13th, 1997)
+ by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippman, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>glwin - A System Interface for OpenGL Applications</TITLE>
+<META NAME="description" CONTENT="glwin - A System Interface for OpenGL Applications">
+<META NAME="keywords" CONTENT="gltools">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="gltools.css">
+<LINK REL="next" HREF="node3.html">
+<LINK REL="previous" HREF="node1.html">
+<LINK REL="up" HREF="gltools.html">
+<LINK REL="next" HREF="node3.html">
+</HEAD>
+<BODY >
+<br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html31"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html33"
+ HREF="node3.html">glrnd - Rendering Volume Management</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html25"
+ HREF="node1.html">Introduction</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><strong>Subsections</strong></A>
+<UL>
+<LI><A NAME="tex2html34"
+ HREF="node2.html#SECTION00021000000000000000">
+Acknowledgements</A>
+<LI><A NAME="tex2html35"
+ HREF="node2.html#SECTION00022000000000000000">
+Installation</A>
+<LI><A NAME="tex2html36"
+ HREF="node2.html#SECTION00023000000000000000">
+Imported packages</A>
+<LI><A NAME="tex2html37"
+ HREF="node2.html#SECTION00024000000000000000">
+Data Types</A>
+<LI><A NAME="tex2html38"
+ HREF="node2.html#SECTION00025000000000000000">
+Constructors and Destructors</A>
+<LI><A NAME="tex2html39"
+ HREF="node2.html#SECTION00026000000000000000">
+Control</A>
+<LI><A NAME="tex2html40"
+ HREF="node2.html#SECTION00027000000000000000">
+Callbacks</A>
+<LI><A NAME="tex2html41"
+ HREF="node2.html#SECTION00028000000000000000">
+Inquiries</A>
+<LI><A NAME="tex2html42"
+ HREF="node2.html#SECTION00029000000000000000">
+Text output</A>
+<LI><A NAME="tex2html43"
+ HREF="node2.html#SECTION000210000000000000000">
+Feedback buffer interface</A>
+<LI><A NAME="tex2html44"
+ HREF="node2.html#SECTION000211000000000000000">
+Obsolete functions, maintained for backward compatibility
+</A>
+<LI><A NAME="tex2html45"
+ HREF="node2.html#SECTION000212000000000000000">
+Things from tk  never used  and never checked.
+</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<H1><A NAME="SECTION00020000000000000000">
+glwin - A System Interface for OpenGL Applications</A>
+</H1>
+<I>Revision</I>: 2.37
+<BR>
+<I>Date</I>: 2001/03/02 16:38:05
+<BR>
+Author: J&#252;rgen Fuhrmann
+<BR>
+<P>
+<P>
+<BR>
+<P>
+This  module provides   access   to basic   facilities as   X   window
+management,  event handling, off  screen rendering  etc.   It has been
+derived from the  OpenGL sample  <EM>tk</EM> code by  putting all global
+variables into a structure  called <TT>glWindow</TT>.  Not everything has
+been  checked, especially   not  the color  index   stuff.   I is  the
+intention of the author  to keep track of  changes in the <EM>libtk</EM>
+toolkit. 
+There are three   main difference to  the <EM>libtk</EM> kit:
+ <UL>
+<LI> <EM>glwin</EM> is able to  to manage more than  one window at one
+   time. This  has been achieved by wrapping  all  global variables of
+   <EM>libtk</EM> into  a (hidden) data type  <TT>glWindow</TT> and  letting
+   the user provide  data to all callback  routines via a  <TT>void*</TT>
+   parameter.
+<LI> The  event loop (called    by  <TT>glwProcess()</TT>)  knows  an
+   application-controlled  and  an  event-controlled (user-controlled)
+   mode.
+<P>
+In  application-controlled  mode it is   possible  to  attach a  GL
+   window, let   it process any pending  events,  render user data and
+   exit without  destroying   the window contents.    This enables the
+   usage of  <EM>glwin</EM> under  the control  of the application during
+   transient simulations etc.
+<P>
+In  event-controlled  mode,   the  event   loop  needs  some   user
+   itervention (e.g. key press) to exit.
+<LI> <TT>glwGrab()</TT> grabs the actual window contents and dumps it
+      into a ppm file.
+<LI> <TT>glwStartMPEGRecording()/glwStopMPEGRecording</TT> record an MPEG stream
+ using mpeg_encode version 1.5 or higher.
+<LI> <TT>glwStartEPSRecording()/glwStopEPSRecording</TT> record to a multipage
+  eps or pdf file
+<P></UL><H2><A NAME="SECTION00021000000000000000">
+Acknowledgements</A>
+</H2>
+<P>
+The kernel  of the code has been  derived from various versions of the
+''tk nano window toolkit'' which comes  along as OpenGL demo software.
+Namely, code comes from versions on SGI and Digital machines, and from
+the MESA distribution. If that code wouldn't have been available 
+in source form, gltools would not exist.
+<P><H2><A NAME="SECTION00022000000000000000">
+Installation</A>
+</H2>
+<A NAME="glwin:subsect:Installation">&#160;</A>The installation should be fairly simple. You need an ANSI C compiler,
+the headers and libraries of X11 and GL and.
+Sorry for not providing Imakefiles and/or configure scripts - to me, these
+are  a mess, and I try not to  use anyting non-portable in my code.
+<P><H3><A NAME="SECTION00022100000000000000">
+Installation with vendor installed OpenGL</A>
+</H3>
+Everything should be smooth, you don't need to define 
+any preprocessor options. Link with ''<TT>-lGL -lXext -lX11</TT>''.
+<P><H3><A NAME="SECTION00022200000000000000">
+Installation with MESA</A>
+</H3>
+<P>
+Obtain MESA from 
+<TT>http://www.ssec.wisc.edu/&nbsp;brianp/Mesa.html</TT>
+and install it - the best way would be in <TT>/usr/local/*</TT>.
+<P>
+Then compile <TT>glwin.c</TT> with ''<TT>-I/usr/local/include</TT>''
+and link with
+<BR> ''<TT>-L/usr/local/lib -lMesaGL -lXext -lX11</TT>''
+(or whatever you have called the MESA libraries).
+<P><H2><A NAME="SECTION00023000000000000000">
+Imported packages</A>
+</H2>
+<P>
+<DIV ALIGN="LEFT">
+<code>#ifndef GLW_HEADER</code>
+<BR><code>#define GLW_HEADER</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#include &lt;GL/gl.h&gt;</code>
+<BR><code>#include &lt;stdio.h&gt;</code>
+</DIV><H2><A NAME="SECTION00024000000000000000">
+Data Types</A>
+</H2>
+<P><H3><A NAME="SECTION00024100000000000000">
+glWindow</A>
+</H3>
+<A NAME="func:glWindow">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef  struct glWindowStruct *glWindow;  </code>
+</DIV>
+<P>
+This is the basic handle
+structure, all data in it are hidden from the user.
+<P><H2><A NAME="SECTION00025000000000000000">
+Constructors and Destructors</A>
+</H2>
+<P><H3><A NAME="SECTION00025100000000000000">
+glwInitDisplayMode</A>
+</H3>
+<A NAME="func:glwInitDisplayMode">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitDisplayMode(</code>
+<BR><code>                        GLenum mode</code>
+<BR><code>                        );</code>
+</DIV>
+<P>
+Set the display mode for next window to create.
+The  default value is
+<BR> <code>GLW_RGB|GLW_DOUBLE|GLW_DIRECT|GLW_DEPTH</code>.
+Possible values are combinations of the following bitmasks:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_RGB         0       /*</code> RGB mode <code>*/</code>
+<BR><code>#define GLW_INDEX       1       /*</code> Color index mode <code>*/</code>
+<BR><code>#define GLW_SINGLE      0       /*</code> Single buffer mode <code>*/</code>
+<BR><code>#define GLW_DOUBLE      2       /*</code> Double buffer mode <code>*/</code>
+<BR><code>#define GLW_DIRECT      0       /*</code> Direct rendering <code>*/</code>
+<BR><code>#define GLW_INDIRECT    4       /*</code> Indirect rendering <code>*/</code>
+<BR><code>#define GLW_ACCUM       8       /*</code> Enable accumulation buffer  <code>*/</code>
+<BR><code>#define GLW_ALPHA       16      /*</code> Enable alpha calculations <code>*/ </code>
+<BR><code>#define GLW_DEPTH       32      /*</code> Enable depth buffer <code>*/</code>
+<BR><code>#define GLW_OVERLAY     64      /*</code> Create Window with overlay <code>*/</code>
+<BR><code>#define GLW_UNDERLAY    128</code>
+<BR><code>#define GLW_STENCIL     512    </code>
+<BR><code>#define GLW_PIXMAP     1024</code>
+</DIV>
+<P>
+At startup    and after creating   a window,  all  values  are reset to
+the defaults.  The values  set are used  only for the next window
+created.
+<P><H3><A NAME="SECTION00025200000000000000">
+glwInitPos</A>
+</H3>
+<A NAME="func:glwInitPos">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitPos(</code>
+<BR><code>                     int x,</code>
+<BR><code>                     int y</code>
+<BR><code>                     );</code>
+</DIV>
+<P>
+Set the   initial position of  the upper left corner of the
+window on  the screen.
+Default: (0,0) (Upper left corner of the screen).
+<P><H3><A NAME="SECTION00025300000000000000">
+glwInitSize</A>
+</H3>
+<A NAME="func:glwInitSize">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitPos(</code>
+<BR><code>                     int x,</code>
+<BR><code>                     int y</code>
+<BR><code>                     );</code>
+<BR><code>#define GLW_SIZE_MPEG1_PAL  352,288 </code>
+<BR><code>#define GLW_SIZE_MPEG2_PAL  704,576</code>
+<BR><code>#define GLW_SIZE_MPEG1_NTSC 352,240 </code>
+<BR><code>#define GLW_SIZE_MPEG2_NTSC 704,480</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_SIZE_1 1024,768</code>
+<BR><code>#define GLW_SIZE_2 1280,1024</code>
+<BR><code>#define GLW_SIZE_3 1600,1200</code>
+</DIV>
+<P>
+Set the   size  of the window  on  the screen.
+<P>
+Default: GLW_PAL_HALF.
+The sizes are not mandatory.
+The MPEG-1 standard does not demand any frame size, the MPEG-2 standard
+demans a multiple of 16 in the frame size.
+<P>
+However it is useful to stick to the MPEG sizes given here if one
+wants to use MPEG in connection with hardware.
+<P><H3><A NAME="SECTION00025400000000000000">
+glwInitTitle</A>
+</H3>
+<A NAME="func:glwInitTitle">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitTitle(</code>
+<BR><code>                  char * title</code>
+<BR><code>                  );</code>
+</DIV>
+<P>
+Set the title of the window to be created.
+Default: ''gltools-1.0''
+<P>
+At startup and after  creating a window, all values  are reset to  the
+defaults.  The values set are used only for the next window created.
+<P>
+The maximum length of a name is defined here:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_NAMELEN 128</code>
+</DIV><H3><A NAME="SECTION00025500000000000000">
+glwInitDisplayModePolicy</A>
+</H3>
+<A NAME="func:_glwInitDisplayModePolicy">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitDisplayModePolicy(</code>
+<BR><code>                              GLenum type</code>
+<BR><code>                              );</code>
+</DIV>
+<P>
+Set visual match mode.
+   Default: <code>GLW_MINIMUM_CRITERIA</code>.
+<P>
+Possible values:
+<P>
+<DIV ALIGN="LEFT">
+<code>enum {</code>
+<BR><code>    GLW_USE_ID = 1,</code>
+<BR><code>    GLW_EXACT_MATCH,</code>
+<BR><code>    GLW_MINIMUM_CRITERIA</code>
+<BR><code>};</code>
+</DIV>
+<P>
+At startup and  after creating a window,  all values are  reset to the
+defaults.  The values set are used only for the next window created.
+<P><H3><A NAME="SECTION00025600000000000000">
+glwInitOffscreen</A>
+</H3>
+<A NAME="func:glwInitOffscreen">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitOffscreen(void);</code>
+</DIV>
+<P>
+Declare window to be created to be an offscreen window. This could
+be used for e.g. for creating frames in batch mode. The corresponding
+code is in beta status.
+<P>
+At startup and  after creating a window,  all values are  reset to the
+defaults.  The values set are used only for the next window created.
+<P>
+<DIV ALIGN="LEFT">
+<code>void glwInitToplevel(void *toplevel);</code>
+</DIV>
+<P>
+Declare the toplevel window of the system window to be created.
+Under X11, it is used as the target for the &quot;transient_for&quot; property.
+<P><H3><A NAME="SECTION00025700000000000000">
+glwInitAspectKeeping</A>
+</H3>
+<A NAME="func:glwInitAspectKeeping">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwInitAspectKeeping(</code>
+<BR><code>                          int yesno</code>
+<BR><code>                          );</code>
+</DIV>
+<P>
+Keep aspect ratio of window when resizing.
+   Default: 1 (yes).
+<P>
+At startup and after  creating a window, all values  are reset to  the
+defaults.  The values set are used only for the next window created.
+<P><H3><A NAME="SECTION00025800000000000000">
+glwGetDefault</A>
+</H3>
+<A NAME="func:glwGetDefault">&#160;</A>
+<P>
+<DIV ALIGN="LEFT">
+<code>char * glwGetDefault(glWindow w, char * resource, char *dflt);</code>
+</DIV>
+<P>
+Read resource from resource database, e.g. reads
+gltools*printerCommand from your .Xdefaults.
+Returns default if resource has not been found in database.
+<P><H3><A NAME="SECTION00025900000000000000">
+glwCreate</A>
+</H3>
+<A NAME="func:glwCreate">&#160;</A>
+<P>
+<DIV ALIGN="LEFT">
+<code>glWindow  glwCreate(</code>
+<BR><code>                    void</code>
+<BR><code>                    );</code>
+</DIV>
+<P>
+Create a window.
+   Multiple windows may be created. 
+   OpenGL renders into the window freshly created or the window
+   defined by <TT>glwAttach</TT> (<A HREF="node2.html#func:glwAttach">2.6.1</A>).
+<P><H3><A NAME="SECTION000251000000000000000">
+glwDestroy</A>
+</H3>
+<A NAME="func:glwDestroy">&#160;</A>
+<P>
+<DIV ALIGN="LEFT">
+<code>void      glwDestroy(</code>
+<BR><code>                     glWindow win</code>
+<BR><code>                     );</code>
+</DIV>
+<P>
+Destroy the window.
+<P><H2><A NAME="SECTION00026000000000000000">
+Control</A>
+</H2>
+<P><H3><A NAME="SECTION00026100000000000000">
+glwAttach</A>
+</H3>
+<A NAME="func:glwAttach">&#160;</A>
+<P>
+<DIV ALIGN="LEFT">
+<code>int       glwAttach(</code>
+<BR><code>                    glWindow win</code>
+<BR><code>                    );</code>
+</DIV>
+<P>   ''Attach'' the window, i.e. make the corresponding OpenGL context
+current.
+<P><H3><A NAME="SECTION00026200000000000000">
+glwFlush</A>
+</H3>
+<A NAME="func:glwFlush">&#160;</A>
+<P>
+<DIV ALIGN="LEFT">
+<code>void       glwFlush(</code>
+<BR><code>                    glWindow win</code>
+<BR><code>                    );</code>
+</DIV>
+<P>
+Flush the window.
+<P><H3><A NAME="SECTION00026300000000000000">
+glwProcess</A>
+</H3>
+<A NAME="func:glwProcess">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void      glwProcess(</code>
+<BR><code>                     glWindow win,</code>
+<BR><code>                     void *user_data</code>
+<BR><code>                     );</code>
+</DIV>
+<P>
+Process event loop. User data are rendered by calling the
+   redraw function set by <TT>glwSetRedrawFunc</TT> (<A HREF="node2.html#func:glwSetRedrawFunc">2.7.1</A>). 
+The event loop is exited 
+   <UL>
+<LI> after  <TT>glwQuit()</TT> call (user intervention) in 
+     event driven mode
+<LI> after processing pending events, <EM>one</EM> redraw and <TT>glwQuit()</TT> 
+      in 
+     application driven mode.
+   </UL>
+   The parameter <TT>info</TT> is used to pass user data to the callback routines.
+<P>
+Thus, gltools can be used for rendering under control of the user code.
+<P><H3><A NAME="SECTION00026400000000000000">
+glwSetControlMode</A>
+</H3>
+<A NAME="func:glwSetControlMode">&#160;</A> 
+<DIV ALIGN="LEFT">
+<code>void glwSetControlMode(</code>
+<BR><code>                       glWindow w, </code>
+<BR><code>                       int mode</code>
+<BR><code>                       );</code>
+</DIV>
+<P>
+Set control mode. Possible values:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_EVENT_DRIVEN 1               /*</code> default <code>*/</code>
+<BR><code>#define GLW_APPLICATION_DRIVEN 2</code>
+</DIV><H3><A NAME="SECTION00026500000000000000">
+glwGrabPPM</A>
+</H3>
+<A NAME="func:glwGrabPPM">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glwGrabPPM(</code>
+<BR><code>              glWindow win, </code>
+<BR><code>              FILE *f</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Grab actual window contents and write it into 
+a  <EM>ppm</EM> file.
+<P><H3><A NAME="SECTION00026600000000000000">
+glwGrabPPMAndPrint</A>
+</H3>
+<A NAME="func:glwGrabPPMAndPrint">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glwGrabPPMAndPrint(</code>
+<BR><code>              glWindow win</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Grab actual window contents to ppm and print as postscript.
+  You can influence the  way the picture is printed if you specify
+  the X resource <TT>gltools*printerCommand</TT>. The default is 
+  <TT>pnmtops | lpr</TT>.
+<P><H3><A NAME="SECTION00026700000000000000">
+glwStartMPEGRecording</A>
+</H3>
+<A NAME="func:glwStartMPEGRecording">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwStartMPEGRecording(</code>
+<BR><code>              glWindow win, </code>
+<BR><code>              char *fileNameStub,</code>
+<BR><code>              int skip</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Start recording of frame data into an MPEG stream using mpeg_encode.  
+Recording is done
+using <TT>glwGrab</TT> (<A HREF="#func:glwGrab"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]"
+ SRC="http://cbl.leeds.ac.uk/nikos/figs//cross_ref_motif.gif"></A>) which is called within <TT>glwSwapBuffers</TT> (<A HREF="node2.html#func:glwSwapBuffers">2.6.15</A>). 
+You can influence the video recording  if you specify in the X resource
+<TT>gltools*mpegParameters</TT> the name of an mpeg_encode parameter file. See
+the corresponding documentation to learn how to set up such a file.
+The parameter <TT>skip</TT> determines how many frames are skipped between
+the two dumps.
+<P><H3><A NAME="SECTION00026800000000000000">
+glwStopMPEGRecording</A>
+</H3>
+<A NAME="func:glwStopMPEGRecording">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glwStopMPEGRecording(</code>
+<BR><code>              glWindow win</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Stop recording of frame data initiated by 
+<TT>glwStartMPEGRecording</TT> (<A HREF="node2.html#func:glwStartMPEGRecording">2.6.7</A>).
+<P><H3><A NAME="SECTION00026900000000000000">
+glwStartEPSRecording</A>
+</H3>
+<A NAME="func:glwStartEPSRecording">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwStartEPSRecording(</code>
+<BR><code>              glWindow win, </code>
+<BR><code>              char *fileNameStub,</code>
+<BR><code>              int skip</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Start recording of frame data into an EPS file using the eps dump feature.
+The parameter <TT>skip</TT> determines how many frames are skipped between
+ two dumps. If the file name ends with &quot;.pdf&quot; and ps2pdf is installed
+on the search path, pdf is recorded, instead.
+<P><H3><A NAME="SECTION000261000000000000000">
+glwStopEPSRecording</A>
+</H3>
+<A NAME="func:glwStopEPSRecording">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glwStopEPSRecording(</code>
+<BR><code>              glWindow win</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Stop recording of frame data initiated by 
+<TT>glwStartEPSRecording</TT> (<A HREF="node2.html#func:glwStartEPSRecording">2.6.9</A>).
+<P><H3><A NAME="SECTION000261100000000000000">
+glwDump</A>
+</H3>
+<A NAME="func:glwDump">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glwDump(</code>
+<BR><code>              glWindow win, </code>
+<BR><code>              void * info, </code>
+<BR><code>              char *fileName, </code>
+<BR><code>              int w, </code>
+<BR><code>              int h</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Render data into off screen pixmap of size <IMG WIDTH="43" HEIGHT="26" ALIGN="MIDDLE" BORDER="0"
+ SRC="img1.gif"
+ ALT="$w \times h$"> using the  redraw function set by <TT>glwSetRedrawFunc</TT> (<A HREF="node2.html#func:glwSetRedrawFunc">2.7.1</A>) 
+ and 
+create a  <EM>ppm</EM> file. This code is in beta state.
+To be able to use this option, one has to create all OpenGL transformation
+data etc. in the redraw function.
+<P>
+If <I>w</I>&lt;0 or <I>h</I>&lt;0, we take the actual size of the window on the screen.
+<P><H3><A NAME="SECTION000261200000000000000">
+glwShowState</A>
+</H3>
+<A NAME="func:_glwShowState">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void      glwShowState(</code>
+<BR><code>                       glWindow win, </code>
+<BR><code>                       char *state</code>
+<BR><code>                       );</code>
+</DIV>
+<P>
+The title bar of a gltools window consists of two parts:
+   the title itself and a status area. This function sets the
+   status part.
+<P><H3><A NAME="SECTION000261300000000000000">
+glwSetTitle</A>
+</H3>
+<A NAME="func:glwSetTitle">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void      glwSetTitle(</code>
+<BR><code>                      glWindow w, </code>
+<BR><code>                      char *title</code>
+<BR><code>                      );</code>
+</DIV>
+<P>
+The title bar of a gltools window consists of two parts:
+   the title itself and a status area. This function sets the
+   title  part.
+<H3><A NAME="SECTION000261400000000000000">
+glwQuit</A>
+</H3>
+<A NAME="func:glwQuit">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwQuit(</code>
+<BR><code>             glWindow w</code>
+<BR><code>             );</code>
+</DIV>
+<P>
+Stop event processing in <TT>glwProcess</TT> (<A HREF="node2.html#func:glwProcess">2.6.3</A>).
+<P><H3><A NAME="SECTION000261500000000000000">
+glwSwapBuffers</A>
+</H3>
+<A NAME="func:glwSwapBuffers">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void    glwSwapBuffers(</code>
+<BR><code>                       glWindow w</code>
+<BR><code>                       ); </code>
+</DIV>
+<P>
+Swap buffers in double buffer mode.
+<H3><A NAME="SECTION000261600000000000000">
+glwDebug</A>
+</H3>
+<A NAME="func:glwDebug">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwDebug(void);</code>
+</DIV>
+<P>
+Toggle debugging output  of <TT>glwin</TT> (which goes to stderr).
+<P><H2><A NAME="SECTION00027000000000000000">
+Callbacks</A>
+</H2>
+<H3><A NAME="SECTION00027100000000000000">
+glwSetRedrawFunc</A>
+</H3>
+<A NAME="func:glwSetRedrawFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetRedrawFunc(</code>
+<BR><code>                      glWindow w, </code>
+<BR><code>                      void (*f)(</code>
+<BR><code>                                glWindow w, </code>
+<BR><code>                                void * user_data</code>
+<BR><code>                                )</code>
+<BR><code>                      );</code>
+</DIV>
+<P>
+Set user draw function. This function is called when  a redraw is needed.
+Only this function should call OpenGL routines to draw something.
+<P><H3><A NAME="SECTION00027200000000000000">
+glwSetExposeFunc</A>
+</H3>
+<A NAME="func:glwSetExposeFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetExposeFunc(</code>
+<BR><code>                      glWindow w,</code>
+<BR><code>                      void (*f)(</code>
+<BR><code>                                glWindow w, </code>
+<BR><code>                                void *user_data,</code>
+<BR><code>                                int width, </code>
+<BR><code>                                int height</code>
+<BR><code>                                )</code>
+<BR><code>                      );</code>
+</DIV>
+<P>
+Set function to be called after expose event.
+ <TT>width</TT> and <TT>height</TT> contain the new size of the window.
+<P><H3><A NAME="SECTION00027300000000000000">
+glwSetReshapeFunc</A>
+</H3>
+<A NAME="func:glwSetReshapeFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetReshapeFunc(</code>
+<BR><code>                       glWindow w,</code>
+<BR><code>                       void (*f)(</code>
+<BR><code>                                 glWindow w,</code>
+<BR><code>                                 void *user_data,</code>
+<BR><code>                                 int width,</code>
+<BR><code>                                 int height</code>
+<BR><code>                                 )</code>
+<BR><code>                       );</code>
+</DIV>
+<P>
+Set function to be called after reshape event.
+ <TT>width</TT> and <TT>height</TT> contain the new size of the window.
+<P><H3><A NAME="SECTION00027400000000000000">
+glwSetKeyDownFunc</A>
+</H3>
+<A NAME="func:glwSetKeyDownFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetKeyDownFunc(</code>
+<BR><code>                       glWindow w,</code>
+<BR><code>                       GLenum (*f)(</code>
+<BR><code>                                   glWindow w,</code>
+<BR><code>                                   void *user_data,</code>
+<BR><code>                                   int key,</code>
+<BR><code>                                   GLenum button_shift_mask</code>
+<BR><code>                                   )</code>
+<BR><code>                       );</code>
+</DIV>
+<P>
+Set function to be called after key press.
+ The <TT>key</TT> parameter can have the following values:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_A                   'A'</code>
+<BR><code>#define GLW_B                   'B'</code>
+<BR><code>#define GLW_C                   'C'</code>
+<BR><code>#define GLW_D                   'D'</code>
+<BR><code>#define GLW_E                   'E'</code>
+<BR><code>#define GLW_F                   'F'</code>
+<BR><code>#define GLW_G                   'G'</code>
+<BR><code>#define GLW_H                   'H'</code>
+<BR><code>#define GLW_I                   'I'</code>
+<BR><code>#define GLW_J                   'J'</code>
+<BR><code>#define GLW_K                   'K'</code>
+<BR><code>#define GLW_L                   'L'</code>
+<BR><code>#define GLW_M                   'M'</code>
+<BR><code>#define GLW_N                   'N'</code>
+<BR><code>#define GLW_O                   'O'</code>
+<BR><code>#define GLW_P                   'P'</code>
+<BR><code>#define GLW_Q                   'Q'</code>
+<BR><code>#define GLW_R                   'R'</code>
+<BR><code>#define GLW_S                   'S'</code>
+<BR><code>#define GLW_T                   'T'</code>
+<BR><code>#define GLW_U                   'U'</code>
+<BR><code>#define GLW_V                   'V'</code>
+<BR><code>#define GLW_W                   'W'</code>
+<BR><code>#define GLW_X                   'X'</code>
+<BR><code>#define GLW_Y                   'Y'</code>
+<BR><code>#define GLW_Z                   'Z'</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_a                   'a'</code>
+<BR><code>#define GLW_b                   'b'</code>
+<BR><code>#define GLW_c                   'c'</code>
+<BR><code>#define GLW_d                   'd'</code>
+<BR><code>#define GLW_e                   'e'</code>
+<BR><code>#define GLW_f                   'f'</code>
+<BR><code>#define GLW_g                   'g'</code>
+<BR><code>#define GLW_h                   'h'</code>
+<BR><code>#define GLW_i                   'i'</code>
+<BR><code>#define GLW_j                   'j'</code>
+<BR><code>#define GLW_k                   'k'</code>
+<BR><code>#define GLW_l                   'l'</code>
+<BR><code>#define GLW_m                   'm'</code>
+<BR><code>#define GLW_n                   'n'</code>
+<BR><code>#define GLW_o                   'o'</code>
+<BR><code>#define GLW_p                   'p'</code>
+<BR><code>#define GLW_q                   'q'</code>
+<BR><code>#define GLW_r                   'r'</code>
+<BR><code>#define GLW_s                   's'</code>
+<BR><code>#define GLW_t                   't'</code>
+<BR><code>#define GLW_u                   'u'</code>
+<BR><code>#define GLW_v                   'v'</code>
+<BR><code>#define GLW_w                   'w'</code>
+<BR><code>#define GLW_x                   'x'</code>
+<BR><code>#define GLW_y                   'y'</code>
+<BR><code>#define GLW_z                   'z'</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_0                   '0'</code>
+<BR><code>#define GLW_1                   '1'</code>
+<BR><code>#define GLW_2                   '2'</code>
+<BR><code>#define GLW_3                   '3'</code>
+<BR><code>#define GLW_4                   '4'</code>
+<BR><code>#define GLW_5                   '5'</code>
+<BR><code>#define GLW_6                   '6'</code>
+<BR><code>#define GLW_7                   '7'</code>
+<BR><code>#define GLW_8                   '8'</code>
+<BR><code>#define GLW_9                   '9'</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_space               0x020</code>
+<BR><code>#define GLW_exclam              0x021</code>
+<BR><code>#define GLW_quotedbl            0x022</code>
+<BR><code>#define GLW_numbersign          0x023</code>
+<BR><code>#define GLW_dollar              0x024</code>
+<BR><code>#define GLW_percent             0x025</code>
+<BR><code>#define GLW_ampersand           0x026</code>
+<BR><code>#define GLW_apostrophe          0x027</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_quoteright          0x027    </code>
+<BR><code>#define GLW_parenleft           0x028</code>
+<BR><code>#define GLW_parenright          0x029</code>
+<BR><code>#define GLW_asterisk            0x02a</code>
+<BR><code>#define GLW_plus                0x02b</code>
+<BR><code>#define GLW_comma               0x02c</code>
+<BR><code>#define GLW_minus               0x02d</code>
+<BR><code>#define GLW_period              0x02e</code>
+<BR><code>#define GLW_slash               0x02f</code>
+<BR><code>#define GLW_colon               0x03a</code>
+<BR><code>#define GLW_semicolon           0x03b</code>
+<BR><code>#define GLW_less                0x03c</code>
+<BR><code>#define GLW_equal               0x03d</code>
+<BR><code>#define GLW_greater             0x03e</code>
+<BR><code>#define GLW_question            0x03f</code>
+<BR><code>#define GLW_at                  0x040</code>
+<BR><code>#define GLW_bracketleft         0x05b</code>
+<BR><code>#define GLW_bracketright        0x05d</code>
+<BR><code>#define GLW_asciicircum         0x05e</code>
+<BR><code>#define GLW_underscore          0x05f</code>
+<BR><code>#define GLW_grave               0x060</code>
+<BR><code>#define GLW_braceleft           0x07b</code>
+<BR><code>#define GLW_bar                 0x07c</code>
+<BR><code>#define GLW_braceright          0x07d</code>
+<BR><code>#define GLW_asciitilde          0x07e</code>
+<BR><code>#define GLW_Return              0x0D</code>
+<BR><code>#define GLW_BackSpace           0x08</code>
+<BR><code>#define GLW_Escape              0x1B</code>
+<BR><code>#define GLW_Left                0xf5</code>
+<BR><code>#define GLW_Up                  0xf6</code>
+<BR><code>#define GLW_Right               0xf7</code>
+<BR><code>#define GLW_Down                0xf8</code>
+<BR><code>#define GLW_KP_Enter             0x8D </code>
+<BR><code>#define GLW_KP_Home              0x95</code>
+<BR><code>#define GLW_KP_Left              0x96</code>
+<BR><code>#define GLW_KP_Up                0x97</code>
+<BR><code>#define GLW_KP_Right             0x98</code>
+<BR><code>#define GLW_KP_Down              0x99</code>
+<BR><code>#define GLW_KP_Page_Up           0x9A</code>
+<BR><code>#define GLW_KP_Page_Down         0x9B</code>
+<BR><code>#define GLW_KP_End               0x9C</code>
+<BR><code>#define GLW_KP_Begin             0x9D</code>
+<BR><code>#define GLW_KP_Insert            0x9E</code>
+<BR><code>#define GLW_KP_Delete            0x9F</code>
+<BR><code>#define GLW_KP_Divide            0xAF</code>
+<BR><code>#define GLW_KP_Multiply          0xAA</code>
+<BR><code>#define GLW_KP_Add               0xAB</code>
+<BR><code>#define GLW_KP_Subtract          0xAD</code>
+<BR><code>#define GLW_KP_Decimal           0xAE</code>
+<BR><code>#define GLW_KP_0                 0xB0</code>
+<BR><code>#define GLW_KP_1                 0xB1</code>
+<BR><code>#define GLW_KP_2                 0xB2</code>
+<BR><code>#define GLW_KP_3                 0xB3</code>
+<BR><code>#define GLW_KP_4                 0xB4</code>
+<BR><code>#define GLW_KP_5                 0xB5</code>
+<BR><code>#define GLW_KP_6                 0xB6</code>
+<BR><code>#define GLW_KP_7                 0xB7</code>
+<BR><code>#define GLW_KP_8                 0xB8</code>
+<BR><code>#define GLW_KP_9                 0xB9</code>
+<BR><code>#define GLW_F1                   0xBE</code>
+<BR><code>#define GLW_F2                   0xBF</code>
+<BR><code>#define GLW_F3                   0xC0</code>
+<BR><code>#define GLW_F4                   0xC1</code>
+<BR><code>#define GLW_F5                   0xC2</code>
+<BR><code>#define GLW_F6                   0xC3</code>
+<BR><code>#define GLW_F7                   0xC4</code>
+<BR><code>#define GLW_F8                   0xC5</code>
+<BR><code>#define GLW_F9                   0xC6</code>
+<BR><code>#define GLW_F10                  0xC7</code>
+<BR><code>#define GLW_F11                  0xC8</code>
+<BR><code>#define GLW_F12                  0xC9</code>
+</DIV>
+D instead of 5 
+<DIV ALIGN="LEFT">
+<code>#define GLW_Page_Up              0xD5 </code>
+<BR><code>#define GLW_Page_Down            0xD6</code>
+<BR><code>#define GLW_Home                 0xD0</code>
+<BR><code>#define GLW_End                  0xD7</code>
+</DIV>
+E instead of 6 
+<DIV ALIGN="LEFT">
+<code>#define GLW_Insert               0xE3 </code>
+<BR><code>#define GLW_Delete               0xFF </code>
+<BR><code>#define GLW_Print                0x61</code>
+<BR><code>#define GLW_Pause                0x13</code>
+<BR><code>#define GLW_Scroll_Lock          0x14</code>
+<BR><code>#define GLW_Tab                  '\t'</code>
+</DIV>
+<P> <TT>shift_mask</TT> can have the following values:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_SHIFT               8</code>
+<BR><code>#define GLW_CONTROL            16</code>
+<BR><code>#define GLW_MOD1               32</code>
+<BR><code>#define GLW_LOCK               64</code>
+</DIV><H3><A NAME="SECTION00027500000000000000">
+glwSetMouseDownFunc</A>
+</H3>
+<A NAME="func:glwSetMouseDownFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetMouseDownFunc(</code>
+<BR><code>                         glWindow w,</code>
+<BR><code>                         GLenum (*f)(</code>
+<BR><code>                                     glWindow w, </code>
+<BR><code>                                     void *user_data,</code>
+<BR><code>                                     int pos_x, </code>
+<BR><code>                                     int pos_y, </code>
+<BR><code>                                     GLenum button_shift_mask</code>
+<BR><code>                                     )</code>
+<BR><code>                         );</code>
+</DIV>
+<P>
+Set function to be called after pressing a mouse button.
+ <TT>pos_x</TT> and <TT>pos_y</TT> contain the current mouse position.
+ <TT>button_shift_mask</TT> can have the following parameters:
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_LEFTBUTTON          1</code>
+<BR><code>#define GLW_RIGHTBUTTON         2</code>
+<BR><code>#define GLW_MIDDLEBUTTON        4</code>
+</DIV><H3><A NAME="SECTION00027600000000000000">
+glwSetMouseUpFunc</A>
+</H3>
+<A NAME="func:glwSetMouseUpFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetMouseUpFunc(</code>
+<BR><code>                       glWindow w,</code>
+<BR><code>                       GLenum (*f)(</code>
+<BR><code>                                   glWindow w, </code>
+<BR><code>                                   void *user_data,</code>
+<BR><code>                                   int pos_x,</code>
+<BR><code>                                   int pos_y, </code>
+<BR><code>                                   GLenum button_shift_mask</code>
+<BR><code>                                   )</code>
+<BR><code>                       );</code>
+</DIV>
+<P>
+Set function to be called after releasing a mouse button.
+For the meaning of
+the parameters, see <TT>glwSetMouseDownFunc</TT> (<A HREF="node2.html#func:glwSetMouseDownFunc">2.7.5</A>).
+<P><H3><A NAME="SECTION00027700000000000000">
+glwSetMouseMoveFunc</A>
+</H3>
+<A NAME="func:glwSetMouseMoveFunc">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetMouseMoveFunc(</code>
+<BR><code>                         glWindow w,</code>
+<BR><code>                         GLenum (*f)(</code>
+<BR><code>                                     glWindow w, </code>
+<BR><code>                                     void *user_data,</code>
+<BR><code>                                     int pos_x, </code>
+<BR><code>                                     int pos_y, </code>
+<BR><code>                                     GLenum button_shift_mask</code>
+<BR><code>                                     )</code>
+<BR><code>                         );</code>
+</DIV>
+<P>
+Set function to be called after moving the mouse. For the meaning of
+the parameters, see <TT>glwSetMouseDownFunc</TT> (<A HREF="node2.html#func:glwSetMouseDownFunc">2.7.5</A>)
+<P><H2><A NAME="SECTION00028000000000000000">
+Inquiries</A>
+</H2>
+<H3><A NAME="SECTION00028100000000000000">
+glwGetTitle</A>
+</H3>
+<A NAME="func:glwGetTitle">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>char*      glwGetTitle(</code>
+<BR><code>                      glWindow w</code>
+<BR><code>                      );</code>
+</DIV><H3><A NAME="SECTION00028200000000000000">
+glwGetWindowSize</A>
+</H3>
+<A NAME="func:glwGetWindowSize">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwGetWindowSize(</code>
+<BR><code>                      glWindow w, </code>
+<BR><code>                      int *width, </code>
+<BR><code>                      int *heigth</code>
+<BR><code>                      );</code>
+</DIV><H3><A NAME="SECTION00028300000000000000">
+glwIsMesa</A>
+</H3>
+<A NAME="func:glwIsMesa">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>int glwIsMesa(glWindow w);</code>
+</DIV><H2><A NAME="SECTION00029000000000000000">
+Text output</A>
+</H2>
+<P>
+OpenGL does not support text output by itself. But it is possible
+to ''load'' system bitmap fonts or bitmap fonts and to make them
+accessible via the display list mechanism. We took here some lines
+of code from the OpenGL FAQ to access X11 fonts.
+<P><H3><A NAME="SECTION00029100000000000000">
+glwSetFontSize</A>
+</H3>
+<A NAME="func:glwSetFontSize">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwSetFontSize(glWindow w,double size);</code>
+</DIV>
+<P>
+Set font size to size (measured in multiples of the window height)
+<P><H3><A NAME="SECTION00029200000000000000">
+glwPrint</A>
+</H3>
+<A NAME="func:glwPrint">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwPrint(</code>
+<BR><code>              glWindow w,</code>
+<BR><code>              char *s</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Print string at actual raster position (see glRasterpos stuff in the
+OpenGL documentation).
+<P><H3><A NAME="SECTION00029300000000000000">
+glwPrintf</A>
+</H3>
+<A NAME="func:glwPrintf">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glwPrintf(</code>
+<BR><code>               glWindow w,</code>
+<BR><code>               char *format,</code>
+<BR><code>               ...</code>
+<BR><code>               );</code>
+</DIV>
+<P>
+Print formatted string at actual raster position (see glRasterpos stuff in the
+OpenGL documentation).
+<P><H2><A NAME="SECTION000210000000000000000">
+Feedback buffer interface</A>
+</H2>
+<P>
+This is an internal gltools interface to the feedback buffer management
+   of glwin.
+   The main thing one has to remember when parsing feedback buffers is, that
+   currently, glPasstrough with positive values is used to mark strings which
+   are passed to postscript just as strings, not as bitmaps.
+<P>
+<DIV ALIGN="LEFT">
+<code>void glwRenderFB(glWindow w);</code>
+</DIV>
+<P>
+Render to feedback buffer.
+<P>
+<DIV ALIGN="LEFT">
+<code>void glwResetFB(glWindow w);</code>
+</DIV>
+<P>
+Reset feedback buffer.
+<P>
+<DIV ALIGN="LEFT">
+<code>float *glwGetFB(glWindow w);</code>
+</DIV>
+<P>
+Get feedback buffer.
+<P>
+<DIV ALIGN="LEFT">
+<code>int glwGetFBSize(glWindow w);</code>
+</DIV>
+<P>
+Get feedback buffer size.
+<P>
+<DIV ALIGN="LEFT">
+<code>char *glwGetFBString(glWindow w,int istring);</code>
+</DIV>
+<P>
+Get ith string from list.
+<P>
+<DIV ALIGN="LEFT">
+<code>double glwGetFBStringSize(glWindow w,int istring);</code>
+</DIV>
+<P>
+Get font size of ith string;
+<P><H2><A NAME="SECTION000211000000000000000">
+Obsolete functions, maintained for backward compatibility
+</A>
+</H2>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glwInitPosition(int x,int y,int w, int h );</code>
+<BR><code>void glwSetIdleFunc(glWindow,void (*)(glWindow w, void *user_data));</code>
+</DIV>
+<P>
+Set draw procedure  and application driven mode
+<P>
+<DIV ALIGN="LEFT">
+<code>void glwSetDisplayFunc(glWindow,void (*)(glWindow w, void *user_data)); </code>
+</DIV>
+<P>
+Set draw procedure  and event driven mode
+<P><H2><A NAME="SECTION000212000000000000000">
+Things from tk  never used  and never checked.
+</A>
+</H2>
+<P>
+<DIV ALIGN="LEFT">
+<code>GLenum glwSetWindowLevel(glWindow ,GLenum);</code>
+<BR><code>int  glwGetColorMapSize(glWindow w);</code>
+<BR><code>void glwGetMouseLoc(glWindow w,int *, int *);</code>
+<BR><code>void glwSetOneColor(glWindow w, int, float, float, float);</code>
+<BR><code>void glwSetFogRamp(glWindow w,int, int);</code>
+<BR><code>void glwSetGreyRamp(glWindow w);</code>
+<BR><code>void glwSetRGBMap(glWindow w,int, float *);</code>
+<BR><code>void glwSetOverlayMap(glWindow w,int, float *);</code>
+</DIV>
+<P>
+Various stuff.
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_IS_RGB(x)           (((x) &amp; GLW_INDEX) == 0)</code>
+<BR><code>#define GLW_IS_INDEX(x)         (((x) &amp; GLW_INDEX) != 0)</code>
+<BR><code>#define GLW_IS_SINGLE(x)                (((x) &amp; GLW_DOUBLE) == 0)</code>
+<BR><code>#define GLW_IS_DOUBLE(x)                (((x) &amp; GLW_DOUBLE) != 0)</code>
+<BR><code>#define GLW_IS_DIRECT(x)                (((x) &amp; GLW_INDIRECT) == 0)</code>
+<BR><code>#define GLW_IS_INDIRECT(x)      (((x) &amp; GLW_INDIRECT) != 0)</code>
+<BR><code>#define GLW_HAS_ACCUM(x)                (((x) &amp; GLW_ACCUM) != 0)</code>
+<BR><code>#define GLW_HAS_ALPHA(x)                (((x) &amp; GLW_ALPHA) != 0)</code>
+<BR><code>#define GLW_HAS_DEPTH(x)                (((x) &amp; GLW_DEPTH) != 0)</code>
+<BR><code>#define GLW_HAS_OVERLAY(x)      (((x) &amp; GLW_OVERLAY) != 0)</code>
+<BR><code>#define GLW_HAS_UNDERLAY(x)     (((x) &amp; GLW_UNDERLAY) != 0)</code>
+<BR><code>#define GLW_HAS_STENCIL(x)      (((x) &amp; GLW_STENCIL) != 0)</code>
+<BR><code>#define GLW_IS_PIXMAP(x)      (((x) &amp; GLW_PIXMAP) != 0)</code>
+</DIV>
+<P>
+Color Macros
+<P>
+<DIV ALIGN="LEFT">
+<code>enum {</code>
+<BR><code>  GLW_BLACK = 0,</code>
+<BR><code>  GLW_RED,</code>
+<BR><code>  GLW_GREEN,</code>
+<BR><code>  GLW_YELLOW,</code>
+<BR><code>  GLW_BLUE,</code>
+<BR><code>  GLW_MAGENTA,</code>
+<BR><code>  GLW_CYAN,</code>
+<BR><code>  GLW_WHITE</code>
+<BR><code>};</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>extern float glwRGBMap[8][3];</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLW_SETCOLOR(x, y) (GLW_IS_RGB((x)) ? \</code>
+<BR><code>                            glColor3fv(glwRGBMap[(y)]) : glwndexf((y)))</code>
+</DIV>
+<P>
+RGB Image Structure
+<P>
+<DIV ALIGN="LEFT">
+<code>typedef struct _GLW_RGBImageRec {</code>
+<BR><code>    GLint sizeX, sizeY;</code>
+<BR><code>    unsigned char *data;</code>
+<BR><code>} GLW_RGBImageRec;</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#endif</code>
+</DIV><br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html31"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html33"
+ HREF="node3.html">glrnd - Rendering Volume Management</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html25"
+ HREF="node1.html">Introduction</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<ADDRESS>
+<font size=-2>
+ &copy;<a href=http://www.wias-berlin.de/~pdelib/people.html> pdelib team</a>  5/21/2001.
+This page has been generated using the 
+<a href=http://www.dante.de> LaTeX </a> typesetting system and 
+<a href=http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/>latex2html</a>.
+</font>
+</ADDRESS>
+</BODY>
+</HTML>
