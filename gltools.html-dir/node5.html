@@ -1,0 +1,130 @@
+<!--Converted with LaTeX2HTML 97.1 (release) (July 13th, 1997)
+ by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippman, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>gleps - Encapsulated Postscript Dump</TITLE>
+<META NAME="description" CONTENT="gleps - Encapsulated Postscript Dump">
+<META NAME="keywords" CONTENT="gltools">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="gltools.css">
+<LINK REL="previous" HREF="node4.html">
+<LINK REL="up" HREF="gltools.html">
+</HEAD>
+<BODY >
+<br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html76"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> </font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html74"
+ HREF="node4.html">glmesh - Function Drawing on Simplex Meshes</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><strong>Subsections</strong></A>
+<UL>
+<LI><A NAME="tex2html77"
+ HREF="node5.html#SECTION00050100000000000000">
+glepsDumpUnSorted</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<H1><A NAME="SECTION00050000000000000000">
+gleps  - Encapsulated Postscript Dump</A>
+</H1>
+<I>Revision</I>: 2.6
+<BR>
+<I>Date</I>: 2000/11/22 15:20:49
+<BR>
+Author: J&#252;rgen Fuhrmann
+<BR>
+<P>
+<P>
+<BR>
+<P>
+This module provides the possibility to dump rendered graphics into
+vector postscript files using the feedback buffer rendering 
+mechanism of OpenGL. It is in a beta state and possibly will remain
+there because it is not that easy to map all the OpenGL functionality
+to Postscript. It should reasonably well render graphics which remains
+in the limits of the OpenGL features used by the other gltools parts.
+<P>
+This code would not exist if Mark Kilgard wouldn't have placed his
+rendereps sample code onto the net, and if there would not exist 
+Frederic Delhoume's free gouraudtriangle postscript code.
+From Mark's code, handling of lines and polygons has been taken.
+String handling is new.
+<P><H3><A NAME="SECTION00050100000000000000">
+glepsDumpUnSorted</A>
+</H3>
+<A NAME="func:glepsDumpUnSorted">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glepsDumpUnSorted(glWindow w, FILE *file,int crop);</code>
+</DIV>
+<P>
+Create vector postscript dump using the feedback buffer
+   mechanism, but without hidden surface removal.
+  The crop flag is used to decide whether to crop ps output to
+  the actually drawn area or not.
+<P><H3><A NAME="SECTION00050200000000000000">
+glepsDumpSorted</A>
+</H3>
+<A NAME="func:glepsDumpSorted">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glepsDumpSorted(glWindow w, FILE *file, int crop);</code>
+</DIV>
+<P>
+Create vector postscript dump using the feedback buffer
+  mechanism, with hidden surface removal based on sorting
+  the feedback buffer before the dump.
+  The crop flag is used to decide whether to crop ps output to
+  the actually drawn area or not.
+<P><H3><A NAME="SECTION00050300000000000000">
+glepsSetOutputFormat</A>
+</H3>
+<A NAME="func:glepsSetOutputFormat">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glepsSetOutputFormat(char * coord_fmt, char *color_fmt);</code>
+</DIV>
+<P>
+Set the output format for floating point numbers  (different for coordinates and colors)
+  in the postscript file.
+  (The more accurate the format, the longer the file...). There have to
+  be a trailing spaces both formats.
+<P>
+<DIV ALIGN="LEFT">
+<code>void glepsEmitHeader(glWindow w, FILE *file);</code>
+<BR><code>void glepsEmitTrailer(glWindow w, FILE *file, int npages);</code>
+<BR><code>void glepsGrabEPSFrame(glWindow w, FILE *file, int npage);</code>
+</DIV><br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html76"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> </font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html74"
+ HREF="node4.html">glmesh - Function Drawing on Simplex Meshes</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<ADDRESS>
+<font size=-2>
+ &copy;<a href=http://www.wias-berlin.de/~pdelib/people.html> pdelib team</a>  5/21/2001.
+This page has been generated using the 
+<a href=http://www.dante.de> LaTeX </a> typesetting system and 
+<a href=http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/>latex2html</a>.
+</font>
+</ADDRESS>
+</BODY>
+</HTML>
