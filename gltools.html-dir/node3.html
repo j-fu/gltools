@@ -1,0 +1,819 @@
+<!--Converted with LaTeX2HTML 97.1 (release) (July 13th, 1997)
+ by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippman, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>glrnd - Rendering Volume Management </TITLE>
+<META NAME="description" CONTENT="glrnd - Rendering Volume Management ">
+<META NAME="keywords" CONTENT="gltools">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="gltools.css">
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="up" HREF="gltools.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+<BODY >
+<br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html53"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html55"
+ HREF="node4.html">glmesh - Function Drawing on Simplex Meshes</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html47"
+ HREF="node2.html">glwin - A System Interface for OpenGL Applications</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><strong>Subsections</strong></A>
+<UL>
+<LI><A NAME="tex2html56"
+ HREF="node3.html#SECTION00030100000000000000">
+Keyboard User Interface</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<H1><A NAME="SECTION00030000000000000000">
+glrnd - Rendering Volume Management </A>
+</H1>
+<I>Revision</I>: 2.32
+<BR>
+<I>Date</I>: 2001/05/21 14:27:19
+<BR>
+Author: J&#252;rgen Fuhrmann, Hartmut Langmach
+<BR>
+<P>
+<P>
+<BR>
+<P><EM>glrnd</EM>  provides a  framework   for  rendering data in  a  given
+rectangular   rendering   volume and   manages   all  transformations,
+intersection  planes  and  light sources,   so that  actual  rendering
+modules do not have to care about this stuff.  It is controlled by the
+keyboard and the mouse.
+<P><H3><A NAME="SECTION00030100000000000000">
+Keyboard User Interface</A>
+</H3>
+<P>
+The main key to know when working  with <EM>glrnd</EM>  is the <EM>state
+control</EM> key.  It  allows to toggle between application-controlled and
+user-controlled  mode.  If the window  is in user-controlled state, by
+pressing the state control  key together with  the shift key, you give
+control back to the application only until the next invocation of <TT>
+glRender()</TT>.
+<P>
+The following table may be incomplete. You can get the actual keyboard
+layout by pressing the help-Key.
+<P><TABLE COLS=1 BORDER FRAME=BOX RULES=GROUPS>
+<COL ALIGN=LEFT>
+<TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>
+glrnd key table, <code>$Revision: 2.72 $ $Date: 2001/05/18 10:54:13 $</code></TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>Backspace: Enter user control mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>tab: toggle state change mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>Return: Quit user control mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>SPACE: Mode control</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>+: Increase mouse sensitivity.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>,: decrease control parameter.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>-: Decrease mouse sensitivity.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>.: increase control parameter.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>&lt;: Zoom out.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>&gt;: Zoom in.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>?: This help.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>B: Toggle background color (black/white). </TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>d: Dump actual picture to  ppm file (look for *-*.ppm)</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>F: Toggle rendering volume frame (bounding box) drawing.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>I: Change number of isolines.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>.: increase control parameter by a factor.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>O: Toggle Ortho</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>D: Print actual picture using ppm dump</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>R: Reset to internal default.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>S: Save actual state (look for .*-rndstate)</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>V: Start/Stop video recording</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>a: Switch to GUI</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>c: Toggle remembered lists</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>g: Toggle Gouraud/flat shading.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>h: This help.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>i: Toggle isoline mode.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>,: decrease control parameter by a factor.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>l: Toggle level surface mode.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>m: Toggle model display when moving.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>p: Dump actual picture to eps file (look for *-*.eps)</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>q: Mode control (Quit)</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>r: Restore last saved state.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>v: Toggle vscale for plane sections</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>w: toggle wireframe mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>x: Show x orthogonal plane section.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>y: Show y orthogonal plane section.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>z: Show z orthogonal plane section.</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>prev: toggle state change  mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>next: toggle state change  mode</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>left:move left</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>up:move up</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>right:move right</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>down:move down</TD></TR>
+</TBODY><TBODY>
+<TR><TD VALIGN=BASELINE ALIGN=LEFT NOWRAP>Backspace: Enter user control mode</TD></TR>
+</TBODY>
+</TABLE>
+<H3><A NAME="SECTION00030200000000000000">
+Mouse interface</A>
+</H3> 
+All actions can be performed with the  left mouse button pressed down.
+Which action is performed  depends on the state  change mode.  One can
+cycle through the state change mode using the next/prev keyboard keys.
+Wich state change mode is active, is shown in the window title.
+<P>
+Selected state change modes are  bound to other  mouse buttons and the
+combination  of   the shift   key   and  a  mouse button.  Again,  the
+information which mode  is active when  pressing a button is given  in
+the window title.
+<P><H3><A NAME="SECTION00030300000000000000">
+Graphical User Interface</A>
+</H3>
+When the MOTIF option is active  during installation, a graphical user
+interface    can  be  used  with   glrnd.   See  the documentation  of
+<EM>glgui</EM>.
+<P><H2><A NAME="SECTION00031000000000000000">
+Imported packages</A>
+</H2>
+<P>
+<DIV ALIGN="LEFT">
+<code>#ifndef GLRND_H </code>
+<BR><code>#define GLRND_H </code>
+<BR><code>#include &quot;glwin.h&quot;</code>
+</DIV><H2><A NAME="SECTION00032000000000000000">
+Data Types</A>
+</H2>
+<H3><A NAME="SECTION00032100000000000000">
+glRenderer</A>
+</H3>
+<A NAME="func:glRenderer">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef struct glRendererStruct *glRenderer;</code>
+</DIV>
+<P>
+Hidden Data type which contains rendering data.
+<P><H3><A NAME="SECTION00032200000000000000">
+glrApplicationOption</A>
+</H3>
+<A NAME="func:glrApplicationOption">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>#define GLR_MAX_APPLICATION_OPTIONS 10</code>
+<BR><code>typedef struct</code>
+<BR><code>{</code>
+<BR><code>  char key[32];</code>
+<BR><code>  int val;</code>
+<BR><code>} glrApplicationOption;</code>
+</DIV><H3><A NAME="SECTION00032300000000000000">
+glRendererState</A>
+</H3>
+<A NAME="func:glRendererState">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>#define GLR_MAX_OBJECTS 9</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLR_DIR_X 0</code>
+<BR><code>#define GLR_DIR_Y 1</code>
+<BR><code>#define GLR_DIR_Z 2</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>typedef struct glRendererStateStruct</code>
+<BR><code>{</code>
+<BR><code>  double rotx;  /*</code> rotation around x axis <code>*/</code>
+<BR><code>  double roty;  /*</code> rotation around y axis <code>*/</code>
+<BR><code>  double rotz;  /*</code> rotation around z axis <code>*/</code>
+<BR><code>  double tranx; /*</code> translation in x direction <code>*/</code>
+<BR><code>  double trany; /*</code> translation in y direction <code>*/ </code>
+<BR><code>  double tranz; /*</code> translation in z direction <code>*/</code>
+<BR><code>  double vscale; /*</code> value scale [0.0-1.0] <code>*/</code>
+<BR><code>  double zoom;   /*</code> zoom factor <code>*/</code>
+<BR><code>  double ctrl_prm;   /*</code> control parameter for color scale <code>*/</code>
+<BR><code>  double ctrl_fac;   /*</code> control parameter for color scale <code>*/</code>
+<BR><code>  int wireframe; /*</code> show data as wire frame <code>*/</code>
+<BR><code>  int show_frame; /*</code> show frame <code>*/</code>
+<BR><code>  int move_model;    /*</code>switch on  rendering when moving <code>*/ </code>
+<BR><code>  double asp;         </code>
+<BR><code>  int gouraud_shading; /*</code> use gouraud shading <code>*/</code>
+<BR><code>  double sensitivity;  /*</code> mouse sensitvity <code>*/</code>
+<BR><code>  int bg_black;        /*</code> background color black <code>*/</code>
+<BR><code>  double ltx;          /*</code> light position <code>*/</code>
+<BR><code>  double lty;          /*</code> light position <code>*/</code>
+<BR><code>  double ltz;          /*</code> light position <code>*/</code>
+<BR><code>  double plane_d[3];   /*</code> depending on direction, between *min and *max <code>*/</code>
+<BR><code>  double scale[3];     /*</code> scale factors for rendering volumes<code>*/</code>
+<BR><code>  int plane_dir;       /*</code> plane direction (x orth/y orth z orth)<code>*/</code>
+<BR><code>  int level_surf;      /*</code> show isolevel surfaces <code>*/</code>
+<BR><code>  double level;        /*</code> isolevel (between fmin and fmax)<code>*/</code>
+<BR><code>  int ortho;           /*</code> orthogonal projection <code>*/</code>
+<BR><code>  int what_done;            /*</code> what has been changed last <code>*/ </code>
+<BR><code>  double isoline_distance; /*</code> distance between isolines - obsolete<code>*/</code>
+<BR><code>  int isoline_mode;        /*</code> show isolines <code>*/ </code>
+<BR><code>  int show_object[GLR_MAX_OBJECTS+1];       /*</code> show remembered object list <code>*/</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>  double min[3],max[3];        /*</code> renderer volume; read only! <code>*/</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>  double fmin,fmax;        /*</code> min,max of current function <code>*/</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>  int transparency;</code>
+<BR><code>  int spacedim;</code>
+<BR><code>  int show_info;</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>  glrApplicationOption options[GLR_MAX_APPLICATION_OPTIONS];</code>
+<BR><code>  int noptions;</code>
+<BR><code>}  *glRendererState;</code>
+</DIV>
+<P>
+This public structure is desinged to hold all state
+data which are necessary for the interaction with the
+renderer.
+<P>
+<DIV ALIGN="LEFT">
+<code>#define GLR_ROTATE    1</code>
+<BR><code>#define GLR_TRANSLATE 2</code>
+<BR><code>#define GLR_LIGHT     3</code>
+<BR><code>#define GLR_ISOLEVEL  5</code>
+<BR><code>#define GLR_PLANE     6</code>
+<BR><code>#define GLR_INPLANE   7</code>
+<BR><code>#define GLR_PLANE_ASPECT    8</code>
+<BR><code>#define GLR_INPLANE_ASPECT    9</code>
+<BR><code>#define GLR_N_DO         10</code>
+</DIV>
+this are the possible values for what_done
+<P><H2><A NAME="SECTION00033000000000000000">
+Constructors and Destructors</A>
+</H2>
+<P><H3><A NAME="SECTION00033100000000000000">
+glrCreate</A>
+</H3>
+<A NAME="func:glrCreate">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>glRenderer glrCreate(</code>
+<BR><code>                     char *title, </code>
+<BR><code>                     int xpos,</code>
+<BR><code>                     int ypos,</code>
+<BR><code>                     int width,</code>
+<BR><code>                     int height</code>
+<BR><code>                     );</code>
+</DIV>
+<P>
+Create renderer. It also calls <TT>glwin</TT> 
+to create a  window with corresponding  data.
+<P><H3><A NAME="SECTION00033200000000000000">
+glrDestroy</A>
+</H3>
+<A NAME="func:glrDestroy">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrDestroy(</code>
+<BR><code>                glRenderer rnd</code>
+<BR><code>                );</code>
+</DIV>
+<P>
+Destroy renderer (and corresponding window).
+<P><H2><A NAME="SECTION00034000000000000000">
+Setting/Getting Data</A>
+</H2>
+<H3><A NAME="SECTION00034100000000000000">
+glrSetTitle</A>
+</H3>
+<A NAME="func:glrSetTitle">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetTitle(</code>
+<BR><code>                 glRenderer rnd, </code>
+<BR><code>                 char *title</code>
+<BR><code>                 );</code>
+</DIV>
+<P>
+Set title.
+<P><H3><A NAME="SECTION00034200000000000000">
+glrReset</A>
+</H3>
+<A NAME="func:glrReset">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrReset(</code>
+<BR><code>              glRenderer rnd</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+Reset to default all rotations etc.
+<P><H3><A NAME="SECTION00034300000000000000">
+glrSetVolume</A>
+</H3>
+<A NAME="func:glrSetVolume">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetVolume(</code>
+<BR><code>                  glRenderer rnd,</code>
+<BR><code>                  double xmin, </code>
+<BR><code>                  double xmax, </code>
+<BR><code>                  double ymin,</code>
+<BR><code>                  double ymax,</code>
+<BR><code>                  double zmin,</code>
+<BR><code>                  double zmax</code>
+<BR><code>                  );</code>
+</DIV>
+<P>
+Define rendering volume.
+ Everything drawn by the user function has to be placed within this 
+ volume to be visible.
+<P><H3><A NAME="SECTION00034400000000000000">
+glrSetUserInfo</A>
+</H3>
+<A NAME="func:glrSetUserInfo">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetUserInfo(</code>
+<BR><code>                    glRenderer rnd, </code>
+<BR><code>                    char *user_info, /*</code> format string <code>*/</code>
+<BR><code>                    ...              /*</code> data according to user_info <code>*/ </code>
+<BR><code>                    );</code>
+</DIV>
+<P>
+Set user information to be printed in the cooresponding field
+ of the renderer.
+<P><H3><A NAME="SECTION00034500000000000000">
+void glrGetPoint</A>
+</H3>
+<A NAME="func:void_glrGetPoint">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrGetPoint(</code>
+<BR><code>                 glRenderer rnd, </code>
+<BR><code>                 double *x, double *y, double *z</code>
+<BR><code>                 );</code>
+</DIV>
+get intersection point of main planes
+<P><H3><A NAME="SECTION00034600000000000000">
+void glrGetPlane</A>
+</H3>
+<A NAME="func:void_glrGetPlane">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrGetPlane(</code>
+<BR><code>                 glRenderer rnd, </code>
+<BR><code>                 double *a, </code>
+<BR><code>                 double *b, </code>
+<BR><code>                 double *c,</code>
+<BR><code>                 double *d</code>
+<BR><code>                 );</code>
+</DIV><H3><A NAME="SECTION00034700000000000000">
+void glrSetPlane</A>
+</H3>
+<A NAME="func:void_glrSetPlane">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetPlane(</code>
+<BR><code>                 glRenderer rnd, </code>
+<BR><code>                 double a, </code>
+<BR><code>                 double b,</code>
+<BR><code>                 double c, </code>
+<BR><code>                 double d</code>
+<BR><code>                 );</code>
+</DIV>
+<P>
+Get/set data of intersection plane for 3D plane sections:
+the plane is defined by the equation
+
+<P ALIGN="CENTER">
+<I>ax</I>+<I>by</I>+<I>cz</I>+<I>d</I>=0
+<P></P>
+in the three-dimensional space.
+<P><H3><A NAME="SECTION00034800000000000000">
+glrXSetPlane</A>
+</H3>
+<A NAME="func:glrXSetPlane">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrXSetPlane(</code>
+<BR><code>                  glRenderer rnd, </code>
+<BR><code>                  int dir, </code>
+<BR><code>                  double val</code>
+<BR><code>                  );</code>
+</DIV>
+<P>
+Alternative way to set intersection plane  data: <TT>dir</TT> denotes the
+direction ( 0 = x, 1=y, 2=z) the plane should be  orthogonal to, and val
+denotes the distanze from zero.
+<P><H3><A NAME="SECTION00034900000000000000">
+glrSetAxisName</A>
+</H3>
+<A NAME="func:glrSetAxisName">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetAxisName(</code>
+<BR><code>                 glRenderer rnd, </code>
+<BR><code>                 char dir, char *name</code>
+<BR><code>                 );</code>
+</DIV>
+<P>
+Set title.
+<P><H3><A NAME="SECTION000341000000000000000">
+glrSetAxisTics</A>
+</H3>
+<A NAME="func:glrSetAxisTics">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetAxisTics(glRenderer rnd, char dir, int ntics, double *tics);</code>
+</DIV>
+<P>
+Set axis tics;
+<P><H3><A NAME="SECTION000341100000000000000">
+glrArrowList</A>
+</H3>
+<A NAME="func:glrArrowList">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>int glrArrowList(glRenderer rnd);</code>
+</DIV><H2><A NAME="SECTION00035000000000000000">
+Callbacks and Event Processing </A>
+</H2>
+<P><H3><A NAME="SECTION00035100000000000000">
+glrDrawCallback</A>
+</H3>
+<A NAME="func:glrDrawCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef void (*glrDrawCallback)(</code>
+<BR><code>                                glRenderer rnd, </code>
+<BR><code>                                void *data</code>
+<BR><code>                                );</code>
+</DIV>
+<P>
+Callback function for drawing data.
+<P><H3><A NAME="SECTION00035200000000000000">
+glRender</A>
+</H3>
+<A NAME="func:glRender">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glRender(</code>
+<BR><code>              glRenderer rnd, </code>
+<BR><code>              glrDrawCallback f, </code>
+<BR><code>              void *data</code>
+<BR><code>              );</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glRenderWithGUI(glRenderer rnd, </code>
+<BR><code>                     glrDrawCallback f, </code>
+<BR><code>                     void *info);</code>
+</DIV>
+<P>
+Render data with given callback function.
+<P><H3><A NAME="SECTION00035300000000000000">
+glrSetSecondaryCallback</A>
+</H3>
+<A NAME="func:glrSetSecondaryCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetSecondaryCallback(glRenderer rnd,glrDrawCallback scb);</code>
+</DIV>
+<P>
+The user can call a secondary callback which e.g. calls a 
+slave renderer.
+<P><H3><A NAME="SECTION00035400000000000000">
+glrSetInfoCallback</A>
+</H3>
+<A NAME="func:glrSetInfoCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetInfoCallback(glRenderer rnd,glrDrawCallback info);</code>
+</DIV>
+<P>
+The user can draw information into the upper and right info 
+areas.
+<P><H3><A NAME="SECTION00035500000000000000">
+glrDefaultInfoCallback</A>
+</H3>
+<A NAME="func:glrDefaultInfoCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrDefaultInfoCallback(glRenderer rnd,void * thrash);</code>
+</DIV>
+<P>
+This is the default info callback, a user info callback can
+call this.
+<P><H3><A NAME="SECTION00035600000000000000">
+glrSetDataValid</A>
+</H3>
+<A NAME="func:glrSetDataValid">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetDataValid(</code>
+<BR><code>                     glRenderer rnd, </code>
+<BR><code>                     int valid</code>
+<BR><code>                     );</code>
+</DIV>
+<P>
+Tell renderer that all display lists it had compiled are still 
+valid (for dumping and interaction with the GUI).
+<P><H3><A NAME="SECTION00035700000000000000">
+glrShowModel</A>
+</H3>
+<A NAME="func:glrShowModel">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrShowModel(glRenderer rnd,int ishow);</code>
+</DIV>
+<P>
+Tell renderer that it should not draw the model. This function
+can be used by the gui code. On slow displays this may make sense.
+<P><H2><A NAME="SECTION00036000000000000000">
+State file  management</A>
+</H2>
+<H3><A NAME="SECTION00036100000000000000">
+glrSaveState</A>
+</H3>
+<A NAME="func:glrSaveState">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glrSaveState(glRenderer rnd, char *filename);</code>
+</DIV>
+<P>
+Save actual transformation state using a state file.
+A default filename is generated when the second parameter is zero.
+<P><H3><A NAME="SECTION00036200000000000000">
+glrRestoreState</A>
+</H3>
+<A NAME="func:glrRestoreState">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void  glrRestoreState(glRenderer rnd,char *filename);</code>
+</DIV>
+<P>
+Restore actual transformation state using a state file.
+A default filename is generated when the second parameter is zero.
+<P><H3><A NAME="SECTION00036300000000000000">
+glrSetStateFileNameStub</A>
+</H3>
+<A NAME="func:glrSetStateFileNameStub">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetStateFileNameStub(glRenderer rnd, char *name);</code>
+</DIV><H2><A NAME="SECTION00037000000000000000">
+Key actions</A>
+</H2>
+<H3><A NAME="SECTION00037100000000000000">
+glrKeyAction</A>
+</H3>
+<A NAME="func:glrKeyAction">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef int (*glrKeyAction)(</code>
+<BR><code>                            glRenderer rnd,</code>
+<BR><code>                            int mask</code>
+<BR><code>                            );</code>
+</DIV><H3><A NAME="SECTION00037200000000000000">
+glrRegisterKeyAction</A>
+</H3>
+<A NAME="func:glrRegisterKeyAction">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrRegisterKeyAction(</code>
+<BR><code>                          glRenderer rnd, </code>
+<BR><code>                          int key, </code>
+<BR><code>                          glrKeyAction action, </code>
+<BR><code>                          char *help</code>
+<BR><code>                          );</code>
+</DIV>
+<P>
+Register key action callback routine
+<P><H3><A NAME="SECTION00037300000000000000">
+glrDumpHelpFile</A>
+</H3>
+<A NAME="func:glrDumpHelpFile">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrDumpHelpFile(glRenderer rnd);</code>
+</DIV>
+Create help info for keys in LaTeX format
+<P><H2><A NAME="SECTION00038000000000000000">
+Frame dump</A>
+</H2>
+<H3><A NAME="SECTION00038100000000000000">
+glrSetDumpFileNameStub</A>
+</H3>
+<A NAME="func:glrSetDumpFileNameStub">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetDumpFileNameStub(</code>
+<BR><code>                            glRenderer rnd, </code>
+<BR><code>                            char *name</code>
+<BR><code>                            );</code>
+</DIV>
+<P>
+Set file name stub for data dump. Subsequent dumps get the
+corresponding number in the file name. The default name stub is
+derived from the title.
+<P><H3><A NAME="SECTION00038200000000000000">
+glrSetDumpPixmapSize</A>
+</H3>
+<A NAME="func:glrSetDumpPixmapSize">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetDumpPixmapSize(</code>
+<BR><code>                          glRenderer rnd, </code>
+<BR><code>                          int w, </code>
+<BR><code>                          int h</code>
+<BR><code>                          );</code>
+</DIV>
+<P>
+Set size of dump pixmap.
+<P><H3><A NAME="SECTION00038300000000000000">
+glrDumpNext</A>
+</H3>
+<A NAME="func:glrDumpNext">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrDumpNext(</code>
+<BR><code>                 glRenderer rnd</code>
+<BR><code>                 );</code>
+</DIV>
+<P>
+Dump data when invoking <TT>glRender</TT> next time.
+<P><H2><A NAME="SECTION00039000000000000000">
+Graphical User Interface</A>
+</H2>
+<P><H3><A NAME="SECTION00039100000000000000">
+glrGUI</A>
+</H3>
+<A NAME="func:glrGUI">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef void (*glrGUI)(glRenderer rnd);</code>
+</DIV><H3><A NAME="SECTION00039200000000000000">
+glrSetGUI</A>
+</H3>
+<A NAME="func:glrSetGUI">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetGUI(glrGUI gui);</code>
+</DIV>
+<P>
+Bring up a graphical user interface. It should interact
+with the renderer via the state structure <TT>glRendererState</TT> (<A HREF="node3.html#func:glRendererState">3.2.3</A>) and the 
+<TT>glrSetDataValid</TT> (<A HREF="node3.html#func:glrSetDataValid">3.5.6</A>) call.
+<P><H3><A NAME="SECTION00039300000000000000">
+glrGetRendererState</A>
+</H3>
+<A NAME="func:glrGetRendererState">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>glRendererState  glrGetRendererState(glRenderer rnd);</code>
+</DIV><H3><A NAME="SECTION00039400000000000000">
+glrGetWindow</A>
+</H3>
+<A NAME="func:glrGetWindow">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>glWindow glrGetWindow(glRenderer rnd);</code>
+</DIV><H3><A NAME="SECTION00039500000000000000">
+glrGetInfo</A>
+</H3>
+<A NAME="func:glrGetInfo">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void *glrGetInfo(glRenderer rnd);</code>
+</DIV><H2><A NAME="SECTION000310000000000000000">
+Application options</A>
+</H2>
+Application options could be set using a keyboard callback. Alternatively,
+a pulldown menu in the GUI is defined which contains all the application
+options. They should be used to interactively 
+influence user data which are application
+specific.
+<P><H3><A NAME="SECTION000310100000000000000">
+glrSetApplicationOption</A>
+</H3>
+<A NAME="func:glrSetApplicationOption">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glrSetApplicationOption(glRenderer rnd,char *key, int val);</code>
+</DIV><H3><A NAME="SECTION000310200000000000000">
+glrGetApplicationOption</A>
+</H3>
+<A NAME="func:glrGetApplicationOption">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>int glrGetApplicationOption(glRenderer rnd,char *key);</code>
+</DIV><H2><A NAME="SECTION000311000000000000000">
+Obsolete functions</A>
+</H2>
+ These functions are considered to be obsolete. They are still
+maintained for backward compatibility.
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrSetFlatshading(glRenderer rnd, int flat);</code>
+<BR><code>void glrGetFlatshading(glRenderer rnd,int *flat);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void   glrGetVScale(glRenderer rnd,double* vscale);</code>
+<BR><code>void   glrSetVScale(glRenderer rnd, double vscale);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrGetWireframe(glRenderer rnd, int *wireframe);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrGetLevelSurface(glRenderer rnd, int* mode);</code>
+<BR><code>void glrSetLevelSurface(glRenderer rnd,int mode);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrGetLevel(glRenderer rnd, double* lev);</code>
+<BR><code>void glrSetLevel(glRenderer rnd, double lev);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrGetIsolineMode(glRenderer rnd, int* mode);</code>
+<BR><code>void glrSetIsolineMode(glRenderer rnd,int mode);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrMoveWireframe(glRenderer rnd);</code>
+<BR><code>void glrMoveFrame(glRenderer rnd);</code>
+<BR><code>void glrMoveModel(glRenderer rnd);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glrGetDialog(glRenderer rnd, int* dialog);</code>
+<BR><code>void glrSetDialog(glRenderer,int dialog);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>typedef void (*glrDrawCallback2)(</code>
+<BR><code>                                 glRenderer rnd, </code>
+<BR><code>                                 void *data1, </code>
+<BR><code>                                 void *data2</code>
+<BR><code>                                 );</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void glRender2(glRenderer rnd, glrDrawCallback2 f, </code>
+<BR><code>               void *data1,void *data2);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>int  glrLoadFont(glRenderer rnd, int font_number, char *fontName);</code>
+<BR><code>void glrSelectFont(glRenderer rnd, int font_number);</code>
+<BR><code>void glrSetFontSize(glRenderer rnd, double font_size);</code>
+<BR><code>void glrPrint(glRenderer rnd, char *text);</code>
+<BR><code>void glrPrintf(glRenderer rnd, char *format, ...);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#endif</code>
+</DIV><br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html53"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html55"
+ HREF="node4.html">glmesh - Function Drawing on Simplex Meshes</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html47"
+ HREF="node2.html">glwin - A System Interface for OpenGL Applications</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<ADDRESS>
+<font size=-2>
+ &copy;<a href=http://www.wias-berlin.de/~pdelib/people.html> pdelib team</a>  5/21/2001.
+This page has been generated using the 
+<a href=http://www.dante.de> LaTeX </a> typesetting system and 
+<a href=http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/>latex2html</a>.
+</font>
+</ADDRESS>
+</BODY>
+</HTML>
