@@ -1,0 +1,300 @@
+<!--Converted with LaTeX2HTML 97.1 (release) (July 13th, 1997)
+ by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippman, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>glmesh - Function Drawing on Simplex Meshes</TITLE>
+<META NAME="description" CONTENT="glmesh - Function Drawing on Simplex Meshes">
+<META NAME="keywords" CONTENT="gltools">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="gltools.css">
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="up" HREF="gltools.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+<BODY >
+<br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html64"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html66"
+ HREF="node5.html">gleps - Encapsulated Postscript Dump</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html58"
+ HREF="node3.html">glrnd - Rendering Volume Management</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><strong>Subsections</strong></A>
+<UL>
+<LI><A NAME="tex2html67"
+ HREF="node4.html#SECTION00041000000000000000">
+Imported packages</A>
+<LI><A NAME="tex2html68"
+ HREF="node4.html#SECTION00042000000000000000">
+Data Types</A>
+<LI><A NAME="tex2html69"
+ HREF="node4.html#SECTION00043000000000000000">
+Setting Data</A>
+<LI><A NAME="tex2html70"
+ HREF="node4.html#SECTION00044000000000000000">
+Invocation</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<H1><A NAME="SECTION00040000000000000000">
+glmesh - Function Drawing on Simplex Meshes</A>
+</H1>
+Author:J&#252;rgen Fuhrmann
+<BR>
+<I>Revision</I>: 2.19
+<BR>
+<I>Date</I>: 2000/10/18 16:43:32
+<BR>
+<P>
+<P>
+<BR>
+<P><EM>glmesh</EM>   contains rendering   routines   for   triangular   and
+tetrahedreal  meshes based on  callback  functions invoking loops over
+simplices of a mesh  in a data structure given  by the user. No  extra
+data structure  has  to be generated.   Sure, this  causes performance
+drawbacks, but instead the user gains  great flexibility in using this
+interface on his/her data  strucutures.
+<P><EM>glmesh</EM> manages plane sections and  level sets for 3D tetrahedral
+meshes.
+<P>
+The basic principle  is a double  callback mechanism - a loop callback
+function gets  user data and a simplex  callback function as parameter
+which  has to be fed with  number, node numbers  and  coordinates of a
+simplex.
+<P><H2><A NAME="SECTION00041000000000000000">
+Imported packages</A>
+</H2>
+<P>
+<DIV ALIGN="LEFT">
+<code>#ifndef GLMESH_H</code>
+<BR><code>#define GLMESH_H</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>#include &quot;glrnd.h&quot;</code>
+</DIV><H2><A NAME="SECTION00042000000000000000">
+Data Types</A>
+</H2>
+<P><H3><A NAME="SECTION00042100000000000000">
+glMeshStruct</A>
+</H3>
+<A NAME="func:glMeshStruct">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef struct glMeshStruct *glMesh;</code>
+</DIV>
+<P>
+This structure contains all necessary mesh data and is hidden from the
+user.
+<P>
+subsection:Constructors and Destructors
+<P><H3><A NAME="SECTION00042200000000000000">
+glmSimplexCallback</A>
+</H3>
+<A NAME="func:glmSimplexCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef void (*glmSimplexCallback)</code>
+<BR><code>     (</code>
+<BR><code>      glMesh m,</code>
+<BR><code>      int  number_of_this_simplex,</code>
+<BR><code>      int material_of_this_simplex,</code>
+<BR><code>      double *function_defined_on_this_this_simplex,</code>
+<BR><code>      int *index_in_funtion_on_this_simplex, </code>
+<BR><code>      double **coordinates_of_the_nodes</code>
+<BR><code>      );</code>
+</DIV><H3><A NAME="SECTION00042300000000000000">
+glmLoopCallback</A>
+</H3>
+<A NAME="func:glmLoopCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef void (*glmLoopCallback)</code>
+<BR><code>     (</code>
+<BR><code>      glMesh m,</code>
+<BR><code>      void *user_data, </code>
+<BR><code>      glmSimplexCallback call_this_on_every_simplex</code>
+<BR><code>      );</code>
+</DIV><H3><A NAME="SECTION00042400000000000000">
+glmCreate</A>
+</H3>
+<A NAME="func:glmCreate">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>glMesh glmCreate(</code>
+<BR><code>                 int number_of_mesh_nodes, </code>
+<BR><code>                 int number_of_mesh_simplices, </code>
+<BR><code>                 int space_dimension, </code>
+<BR><code>                 void *user_data, </code>
+<BR><code>                 glmLoopCallback loop_over_all_simplices</code>
+<BR><code>                 );</code>
+</DIV>
+<P>
+Generate an instance of <TT>glMesh</TT>. This is cheap.
+<P><H3><A NAME="SECTION00042500000000000000">
+glmDestroy</A>
+</H3>
+<A NAME="func:glmDestroy">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmDestroy(</code>
+<BR><code>                glMesh m</code>
+<BR><code>                );</code>
+</DIV>
+<P>
+Destroy an instance of <TT>glMesh</TT>.
+<P><H2><A NAME="SECTION00043000000000000000">
+Setting Data</A>
+</H2>
+<P><H3><A NAME="SECTION00043100000000000000">
+glmSetFunction</A>
+</H3>
+<A NAME="func:glmSetFunction">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmSetFunction(</code>
+<BR><code>                    glMesh m, </code>
+<BR><code>                    double *f,</code>
+<BR><code>                    double min,</code>
+<BR><code>                    double max</code>
+<BR><code>                    );</code>
+</DIV>
+<P>
+Set piecewise linear function to plot, its minimum and its maximum.  
+ If <IMG WIDTH="74" HEIGHT="24" ALIGN="MIDDLE" BORDER="0"
+ SRC="img2.gif"
+ ALT="$\mbox{\tt min}\gt\mbox{\tt max}$">, they are automatically calculated.
+<P>
+<DIV ALIGN="LEFT">
+<code>double *glmGetNodeFunc(glMesh m);</code>
+</DIV>
+<P>
+<DIV ALIGN="LEFT">
+<code>void *glmGetUserData(glMesh m);</code>
+</DIV><H3><A NAME="SECTION00043200000000000000">
+glmSetFunction</A>
+</H3>
+<A NAME="func:glmSetFunction">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmSetCellFlux(glMesh m, double *values, double min, double max);</code>
+</DIV>
+<P>
+Set piecewise constant flux to plot
+<P><H3><A NAME="SECTION00043300000000000000">
+glmSetVoffset</A>
+</H3>
+<A NAME="func:glmSetVoffset">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmSetVoffset(</code>
+<BR><code>                   glMesh m,</code>
+<BR><code>                   int voffset</code>
+<BR><code>                   );</code>
+</DIV>
+<P>
+Set vector offset (0 or 1)
+<P><H3><A NAME="SECTION00043400000000000000">
+glmColorCallback</A>
+</H3>
+<A NAME="func:glmColorCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef float* (*glmColorCallback)</code>
+<BR><code>     (</code>
+<BR><code>      glMesh m,</code>
+<BR><code>      double fval,</code>
+<BR><code>      float *rgb</code>
+<BR><code>      );</code>
+</DIV><H3><A NAME="SECTION00043500000000000000">
+glmSetColorCallback</A>
+</H3>
+<A NAME="func:glmSetColorCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmSetColorCallback(</code>
+<BR><code>                         glMesh m, </code>
+<BR><code>                         glmColorCallback col</code>
+<BR><code>                         );</code>
+</DIV>
+<P>
+Set color calculation function. <TT>glmRBColor</TT> is the default value.
+<P><H3><A NAME="SECTION00043600000000000000">
+glmMaterialColorCallback</A>
+</H3>
+<A NAME="func:glmMaterialColorCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>typedef float* (*glmMaterialColorCallback)</code>
+<BR><code>     (</code>
+<BR><code>      glMesh m,</code>
+<BR><code>      int imat,</code>
+<BR><code>      float *rgb</code>
+<BR><code>      );</code>
+</DIV><H3><A NAME="SECTION00043700000000000000">
+glmSetMaterialColorCallback</A>
+</H3>
+<A NAME="func:glmSetMaterialColorCallback">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmSetMaterialColorCallback(</code>
+<BR><code>                         glMesh m, </code>
+<BR><code>                         glmMaterialColorCallback col</code>
+<BR><code>                         );</code>
+</DIV>
+<P>
+Set material color calculation function. <TT>glmDefaultMaterialColor</TT> is the default value.
+<P><H3><A NAME="SECTION00043800000000000000">
+glmDrawInfo</A>
+</H3>
+<A NAME="func:glmDrawInfo">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmDrawInfo(glRenderer rnd, glMesh m);</code>
+</DIV>
+<P>
+Info call back for mesh data.
+<P><H2><A NAME="SECTION00044000000000000000">
+Invocation</A>
+</H2>
+<H3><A NAME="SECTION00044100000000000000">
+glmDraw</A>
+</H3>
+<A NAME="func:glmDraw">&#160;</A>
+<DIV ALIGN="LEFT">
+<code>void glmDraw(</code>
+<BR><code>             glRenderer rnd, </code>
+<BR><code>             glMesh m</code>
+<BR><code>             );</code>
+</DIV>
+<P>
+The glmesh draw routines are invoked using <TT>glmDraw</TT> as
+a callback for <TT>glRender</TT>.
+<P>
+<DIV ALIGN="LEFT">
+<code>#endif</code>
+</DIV><br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html64"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html66"
+ HREF="node5.html">gleps - Encapsulated Postscript Dump</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html58"
+ HREF="node3.html">glrnd - Rendering Volume Management</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<ADDRESS>
+<font size=-2>
+ &copy;<a href=http://www.wias-berlin.de/~pdelib/people.html> pdelib team</a>  5/21/2001.
+This page has been generated using the 
+<a href=http://www.dante.de> LaTeX </a> typesetting system and 
+<a href=http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/>latex2html</a>.
+</font>
+</ADDRESS>
+</BODY>
+</HTML>
