@@ -1,0 +1,169 @@
+% $Id: gltools.tex,v 2.16 2003/03/28 16:47:48 fuhrmann Exp $
+\documentclass[a4paper]{article}
+\pagestyle{headings}
+\usepackage{html}
+\usepackage{epsfig}
+\usepackage{verbatim}
+\newcommand{\href}[2]{\htmladdnormallinkfoot{#1}{#2}}
+\newcommand{\xref}[1]{{\tt #1} (\ref{func:#1})}
+\newcommand{\func}[1]{\subsubsection{#1}\label{func:#1}}
+\setlength{\parindent}{0pt}
+\sloppy
+\title{gltools - an OpenGL based on-line graphics toolbox}
+\author{J\"urgen Fuhrmann \and Hartmut Langmach}
+\date{$Date: 2003/03/28 16:47:48 $ $Revision: 2.16 $}
+\begin{document}
+\maketitle
+
+{\em gltools}  is a collection of OpenGL rendering utilities.
+It consists of three layers:
+\begin{description}
+\item[glwin:] Interface to the windowing system.
+\item[glrnd:] Management of an orthogonal  rendering volume.
+\item[glmesh:] Rendering utilities for functions on simplicial meshes
+  including 3D isosurfaces and plane sections.
+\end{description}
+Further, parallel to the system dependent glwin module , 
+there is the system independent gleps module
+which organizes vector postscript dump.
+
+For Information, see also the 
+\htmladdnormallinkfoot{gltools homepage}{http://www.wias-berlin.de/~gltools}.
+
+
+\section{Introduction}
+\subsection{What is the intention of  {\em gltools} ?}
+
+
+You have program and want to make it some pictures. You are developing
+3D code and are unable to find any errors in your data arrays. You
+look for a replacement of GKS which no one seems to have anymore.
+
+Many      graphics        packages,      as       the       
+\htmladdnormallinkfoot{GLUTtoolkit}{http://www.sgi.com/Technology/openGL/glut.html} 
+(which    has nearly      the  same     intentions    as {\em    gltools}),
+\htmladdnormallinkfoot{AVS}{http://www.avs.com}   
+and  \htmladdnormallinkfoot{GRAPE}{http://www.mathematik.uni-freiburg.de/Grape/grape.html} 
+provide a perfect environment.
+
+But for them, one has  to register existing code  as a callback and/or
+one has  to translate the existing  data structures  into those of the
+graphics package.  This may  be  fairly time consuming and  difficult.
+Also, one wants to control the graphics package via the existing code,
+not vice versa.  This is where the {\em gltools} package comes in. 
+
+It should enable one to get easy access to the   OpenGL world
+{\em on-line}
+from one's  {\em own} data structures within {\em existing code}.
+
+It has been tested with OpenGL on SGI Irix 6.x and Compaq Tru64 UNIX 
+as well as with the 
+\htmladdnormallinkfoot{Mesa package}{http://www.ssec.wisc.edu/~brianp/Mesa.html}
+ of Brian Paul. It {\em should} 
+compile with any ANSI-C compiler.
+
+\subsection{What is not the intention of {\em gltools} ?}
+It is intended to keep this package compact. 
+There are two main reasons for this:
+\begin{itemize}
+\item the limited time of the authors 
+\item the ease of use of {\em gltools} for the programmer.
+\end{itemize}
+
+So, it  is until now not planned  to incorporate menu control into the
+package.  An easy  (and most preferred  by the author)  way to provide
+menus would be a callback to a scripting language like {\em tcl} which
+could be equipped with a  menu system, but this  makes sense only when
+the whole code is embedded into such a language. 
+
+\subsection{Sample code}
+\paragraph{glwexample-appctrl.c} contains a simple test
+program with a GL window in application control mode.
+
+\paragraph{glwexample-evctrl.c} contains a simple test
+program with a GL window in event control mode.
+
+\paragraph{glrexample.c} contains a simple test
+program with a GL rendere.
+
+\paragraph*{glview.c} contains a sample program which can be used to render
+function data on rectangular meshes. It is used as a test program
+for {\em glrnd} and {\em glmesh}.
+
+\subsection{To Do}
+\begin{itemize}
+\item vector field rendering 
+\item handle arbitrary clipping planes -- this is
+only a question of a clever  keyboard and  mouse interface, 
+{\em glmesh} already does everything.
+\item relate shown values in the title to real values.
+\item control rotation axes : keys X,Y,Z
+\end{itemize}
+
+
+\input glwin.h-tex
+\input glrnd.h-tex
+\input glmesh.h-tex
+\input gleps.h-tex
+\end{document}
+
+
+
+% $Log: gltools.tex,v $
+% Revision 2.16  2003/03/28 16:47:48  fuhrmann
+% pdelib1.15_alpha1
+%
+% Revision 2.15  2003/03/28 11:20:25  fuhrmann
+% pdelib2.0_alpha1
+%
+% Revision 2.14  1999/12/21 17:18:55  fuhrmann
+% doc update for gltools-2-3
+%
+% Revision 2.13  1998/12/18 14:35:21  fuhrmann
+% Distribution stuff
+%
+% Revision 2.12  1997/12/12 12:45:38  fuhrmann
+% new doc mechanism
+%
+% Revision 2.11  1997/11/27  19:03:09  fuhrmann
+% glwRecord stuff, PAL-Format, tex-file for keys
+%
+% Revision 2.10  1997/11/25  10:12:28  fuhrmann
+% slightly changed input statement
+%
+% Revision 2.9  1997/11/24  17:45:16  fuhrmann
+% introduction removed
+%
+% Revision 2.8  1997/10/27  14:39:46  fuhrmann
+% doc stuff
+%
+% Revision 2.7  1997/05/20  15:59:54  fuhrmann
+% *** empty log message ***
+%
+% Revision 2.6  1997/05/19  18:09:31  fuhrmann
+% func,xref
+%
+% Revision 2.5  1997/05/19  15:46:53  fuhrmann
+% .h-tex include files
+%
+% Revision 2.4  1997/04/04  12:25:52  fuhrmann
+% rcs style, include *.tex
+%
+% Revision 2.3  1996/11/06  20:39:01  fuhrmann
+% documentation improved
+%
+% Revision 2.2  1996/11/06  18:28:34  fuhrmann
+% input files as .h-tex
+%
+% Revision 2.1  1996/09/23  17:05:13  fuhrmann
+% switched to xdoc
+%
+% Revision 2.0  1996/02/15  19:57:10  fuhrmann
+% First meta-stable distribution
+%
+% Revision 1.2  1996/02/15  14:17:45  fuhrmann
+% glwin& glrnd besser dokumentiert
+%
+% Revision 1.1  1995/10/20  15:45:38  fuhrmann
+% Initial revision
+%
