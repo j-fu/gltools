@@ -1,0 +1,162 @@
+<!--Converted with LaTeX2HTML 97.1 (release) (July 13th, 1997)
+ by Nikos Drakos (nikos@cbl.leeds.ac.uk), CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippman, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
+<META NAME="keywords" CONTENT="gltools">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso_8859_1">
+<LINK REL="STYLESHEET" HREF="gltools.css">
+<LINK REL="next" HREF="node2.html">
+<LINK REL="previous" HREF="gltools.html">
+<LINK REL="up" HREF="gltools.html">
+<LINK REL="next" HREF="node2.html">
+</HEAD>
+<BODY >
+<br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html17"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html19"
+ HREF="node2.html">glwin - A System Interface for OpenGL Applications</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html11"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><strong>Subsections</strong></A>
+<UL>
+<LI><A NAME="tex2html20"
+ HREF="node1.html#SECTION00011000000000000000">
+What is the intention of  <EM>gltools</EM> ?</A>
+<LI><A NAME="tex2html21"
+ HREF="node1.html#SECTION00012000000000000000">
+What is not the intention of <EM>gltools</EM> ?</A>
+<LI><A NAME="tex2html22"
+ HREF="node1.html#SECTION00013000000000000000">
+Sample code</A>
+<LI><A NAME="tex2html23"
+ HREF="node1.html#SECTION00014000000000000000">
+To Do</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+<H1><A NAME="SECTION00010000000000000000">
+Introduction</A>
+</H1>
+<H2><A NAME="SECTION00011000000000000000">
+What is the intention of  <EM>gltools</EM> ?</A>
+</H2>
+<P>
+You have program and want to make it some pictures. You are developing
+3D code and are unable to find any errors in your data arrays. You
+look for a replacement of GKS which no one seems to have anymore.
+<P>
+Many      graphics        packages,      as       the       
+<A NAME="tex2html1"
+ HREF="http://www.sgi.com/Technology/openGL/glut.html">GLUTtoolkit</A>
+(which    has nearly      the  same     intentions    as <EM>gltools</EM>),
+<A NAME="tex2html1"
+ HREF="http://www.avs.com">AVS</A>
+and  <A NAME="tex2html1"
+ HREF="http://www.mathematik.uni-freiburg.de/Grape/grape.html">GRAPE</A>
+provide a perfect environment.
+<P>
+But for them, one has  to register existing code  as a callback and/or
+one has  to translate the existing  data structures  into those of the
+graphics package.  This may  be  fairly time consuming and  difficult.
+Also, one wants to control the graphics package via the existing code,
+not vice versa.  This is where the <EM>gltools</EM> package comes in.
+<P>
+It should enable one to get easy access to the   OpenGL world
+<EM>on-line</EM>
+from one's  <EM>own</EM> data structures within <EM>existing code</EM>.
+<P>
+It has been tested with OpenGL on SGI Irix 6.x and Compaq Tru64 UNIX 
+as well as with the 
+<A NAME="tex2html1"
+ HREF="http://www.ssec.wisc.edu/~brianp/Mesa.html">Mesa package</A>
+of Brian Paul. It <EM>should</EM> 
+compile with any ANSI-C compiler.
+<P><H2><A NAME="SECTION00012000000000000000">
+What is not the intention of <EM>gltools</EM> ?</A>
+</H2>
+It is intended to keep this package compact. 
+There are two main reasons for this:
+<UL>
+<LI> the limited time of the authors
+<LI> the ease of use of <EM>gltools</EM> for the programmer.
+</UL>
+<P>
+So, it  is until now not planned  to incorporate menu control into the
+package.  An easy  (and most preferred  by the author)  way to provide
+menus would be a callback to a scripting language like <EM>tcl</EM> which
+could be equipped with a  menu system, but this  makes sense only when
+the whole code is embedded into such a language.
+<P><H2><A NAME="SECTION00013000000000000000">
+Sample code</A>
+</H2>
+<H4><A NAME="SECTION00013010000000000000">
+glwexample-appctrl.c</A>
+</H4>
+ contains a simple test
+program with a GL window in application control mode.
+<P><H4><A NAME="SECTION00013020000000000000">
+glwexample-evctrl.c</A>
+</H4>
+ contains a simple test
+program with a GL window in event control mode.
+<P><H4><A NAME="SECTION00013030000000000000">
+glrexample.c</A>
+</H4>
+ contains a simple test
+program with a GL rendere.
+<P><H4><A NAME="SECTION00013040000000000000">
+glview.c</A>
+</H4>
+ contains a sample program which can be used to render
+function data on rectangular meshes. It is used as a test program
+for <EM>glrnd</EM> and <EM>glmesh</EM>.
+<P><H2><A NAME="SECTION00014000000000000000">
+To Do</A>
+</H2>
+<UL>
+<LI> vector field rendering
+<LI> handle arbitrary clipping planes - this is
+only a question of a clever  keyboard and  mouse interface, 
+<EM>glmesh</EM> already does everything.
+<LI> relate shown values in the title to real values.
+<LI> control rotation axes : keys X,Y,Z
+</UL><br><table border=1 cellspacing=0 cellpadding=0>
+<td> <font size=-1>Up:</font><td> 
+ <font size=-1> <A NAME="tex2html17"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+<td> <font size=-1>Next:</font><td> 
+ <font size=-1> <A NAME="tex2html19"
+ HREF="node2.html">glwin - A System Interface for OpenGL Applications</A></font><tr>
+<td> <font size=-1>Prev:</font><td> 
+ <font size=-1> <A NAME="tex2html11"
+ HREF="gltools.html">gltools - an OpenGL based on-line graphics toolbox</A></font><tr>
+</table>
+<P>
+<BR> <P>
+<P><!--End of Navigation Panel-->
+<ADDRESS>
+<font size=-2>
+ &copy;<a href=http://www.wias-berlin.de/~pdelib/people.html> pdelib team</a>  5/21/2001.
+This page has been generated using the 
+<a href=http://www.dante.de> LaTeX </a> typesetting system and 
+<a href=http://www-dsed.llnl.gov/files/programs/unix/latex2html/manual/>latex2html</a>.
+</font>
+</ADDRESS>
+</BODY>
+</HTML>
